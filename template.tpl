@@ -52,7 +52,7 @@ ___TEMPLATE_PARAMETERS___
     "name": "page_url",
     "displayName": "Page URL",
     "simpleValueType": true,
-    "defaultValue": "{{ Page URL}}"
+    "defaultValue": "{{Page URL}}"
   },
   {
     "type": "SELECT",
