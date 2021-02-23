@@ -15,5 +15,7 @@
 homepage: "https://business.nextdoor.com/enterprise"
 documentation: "https://help.nextdoor.com/s/article/About-Neighborhood-Ad-Center-NAC-Conversion-Pixel"
 versions:
+  - sha: 73590213efa767e47a5d2bdd78d5a249a3661959
+    changeNotes: Fix page URL
   - sha: 2f13451855d65d32d56a4868c501404366c2c9f4
     changeNotes: Initial Nextdoor Template Versions
