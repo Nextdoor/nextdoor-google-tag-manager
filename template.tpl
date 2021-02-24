@@ -67,7 +67,39 @@ ___TEMPLATE_PARAMETERS___
       {
         "value": "CONVERSION",
         "displayValue": "Conversion"
-      }
+      },
+      {
+        "value": "ADD_TO_CART",
+        "displayValue": "Add to Cart"
+      },
+      {
+        "value": "ADD_TO_WISHLIST",
+        "displayValue": "Add to Wishlist"
+      },
+      {
+        "value": "LEAD",
+        "displayValue": "Lead"
+      },
+      {
+        "value": "PURCHASE",
+        "displayValue": "Purchase"
+      },
+      {
+        "value": "SIGN_UP",
+        "displayValue": "Sign Up"
+      },
+      {
+        "value": "START_CHECKOUT",
+        "displayValue": "Start Checkout"
+      },
+      {
+        "value": "SUBSCRIBE",
+        "displayValue": "Subscribe"
+      },
+      {
+        "value": "VIEW_CONTENT",
+        "displayValue": "View Content"
+      },     
     ],
     "simpleValueType": true
   },
