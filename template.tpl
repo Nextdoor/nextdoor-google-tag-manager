@@ -57,7 +57,7 @@ ___TEMPLATE_PARAMETERS___
   {
     "type": "SELECT",
     "name": "event_type",
-    "displayName": "",
+    "displayName": "Event Type",
     "macrosInSelect": true,
     "selectItems": [
       {
