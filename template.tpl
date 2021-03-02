@@ -99,7 +99,7 @@ ___TEMPLATE_PARAMETERS___
       {
         "value": "VIEW_CONTENT",
         "displayValue": "View Content"
-      },     
+      }
     ],
     "simpleValueType": true
   },
