@@ -15,6 +15,8 @@
 homepage: "https://business.nextdoor.com/enterprise"
 documentation: "https://help.nextdoor.com/s/article/About-Neighborhood-Ad-Center-NAC-Conversion-Pixel"
 versions:
+  - sha: 18032deb01919866322e6b9a4e696214e24cee4d
+    changeNotes: Add getCookieValues method
   - sha: 9f0968579457289486f589c700a7f65103693064
     changeNotes: Add multiple events
   - sha: 73590213efa767e47a5d2bdd78d5a249a3661959
