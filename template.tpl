@@ -131,6 +131,7 @@ var sendPixel = require('sendPixel');
 var setInWindow = require('setInWindow');
 var setCookie = require('setCookie');
 var sha256 = require('sha256');
+var getCookieValues = require('getCookieValues');
 
 function mergeObjects() {
     var res = {};
@@ -163,6 +164,7 @@ function bootstrap() {
   var ndp = bootstrapFn();
   createQueue('ndp.queue');
   setInWindow('ndp.sendPixelByGTM', sendPixel, true);
+  setInWindow('ndp.getCookieValues', getCookieValues, true);
 
   data.integration = "gtm";
   log("data = ", data);
@@ -446,6 +448,45 @@ ___WEB_PERMISSIONS___
                     "boolean": false
                   }
                 ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "ndp.getCookieValues"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
+                ]
               }
             ]
           }
@@ -527,6 +568,39 @@ ___WEB_PERMISSIONS___
         "versionId": "1"
       },
       "param": []
+    },
+    "isRequired": true
+  },
+  {
+    "instance": {
+      "key": {
+        "publicId": "get_cookies",
+        "versionId": "1"
+      },
+      "param": [
+        {
+          "key": "cookieAccess",
+          "value": {
+            "type": 1,
+            "string": "specific"
+          }
+        },
+        {
+          "key": "cookieNames",
+          "value": {
+            "type": 2,
+            "listItem": [
+              {
+                "type": 1,
+                "string": "ndclid"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "clientAnnotations": {
+      "isEditedByUser": true
     },
     "isRequired": true
   }
