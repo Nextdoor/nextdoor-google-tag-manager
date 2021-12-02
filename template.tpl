@@ -99,7 +99,47 @@ ___TEMPLATE_PARAMETERS___
       {
         "value": "VIEW_CONTENT",
         "displayValue": "View Content"
-      }
+      },
+      {
+        "value": "CUSTOM_CONVERSION_1",
+        "displayValue": "Custom Conversion 1"
+      },
+      {
+        "value": "CUSTOM_CONVERSION_2",
+        "displayValue": "Custom Conversion 2"
+      },
+      {
+        "value": "CUSTOM_CONVERSION_3",
+        "displayValue": "Custom Conversion 3"
+      },
+      {
+        "value": "CUSTOM_CONVERSION_4",
+        "displayValue": "Custom Conversion 4"
+      },
+      {
+        "value": "CUSTOM_CONVERSION_5",
+        "displayValue": "Custom Conversion 5"
+      },
+      {
+        "value": "CUSTOM_CONVERSION_6",
+        "displayValue": "Custom Conversion 6"
+      },
+      {
+        "value": "CUSTOM_CONVERSION_7",
+        "displayValue": "Custom Conversion 7"
+      },
+      {
+        "value": "CUSTOM_CONVERSION_8",
+        "displayValue": "Custom Conversion 8"
+      },
+      {
+        "value": "CUSTOM_CONVERSION_9",
+        "displayValue": "Custom Conversion 9"
+      },
+      {
+        "value": "CUSTOM_CONVERSION_10",
+        "displayValue": "Custom Conversion 10"
+      }        
     ],
     "simpleValueType": true
   },
