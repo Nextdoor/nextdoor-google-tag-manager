@@ -15,6 +15,8 @@
 homepage: "https://business.nextdoor.com/enterprise"
 documentation: "https://help.nextdoor.com/s/article/About-Neighborhood-Ad-Center-NAC-Conversion-Pixel"
 versions:
+  - sha: 9e5659558173ae7e5c555937dff0b7c3d14102c0
+    changeNotes: Log fixes
   - sha: b108e04c8dcea2cace812778436677a7877d05cf
     changeNotes: Add custom conversion events
   - sha: 18032deb01919866322e6b9a4e696214e24cee4d
