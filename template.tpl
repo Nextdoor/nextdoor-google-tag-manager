@@ -211,7 +211,6 @@ function bootstrap() {
   var additionalInitData = (data.additional_init_data) ? makeTableMap(data.additional_init_data, 'key', 'value') : {};
   var initData = mergeObjects(data, additionalInitData);
 
-  log("initData = ", initData);
   ndp('init', initData.pixel_id, initData);
   ndp('track', initData.event_type, data);
 
