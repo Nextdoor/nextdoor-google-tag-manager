@@ -15,6 +15,10 @@
 homepage: "https://business.nextdoor.com/enterprise"
 documentation: "https://help.nextdoor.com/s/article/About-Neighborhood-Ad-Center-NAC-Conversion-Pixel"
 versions:
+  # Latest version
+  - sha: 5d7822d4f1f3908c45759fdef58a2e7b4947b2a1
+    changeNotes: Added optional multiple Pixel ID inputs.
+  # Older versions
   - sha: 9e5659558173ae7e5c555937dff0b7c3d14102c0
     changeNotes: Log fixes
   - sha: b108e04c8dcea2cace812778436677a7877d05cf
