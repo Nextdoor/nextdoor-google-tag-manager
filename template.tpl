@@ -37,15 +37,18 @@ ___TEMPLATE_PARAMETERS___
     "simpleValueType": true,
     "valueValidators": [
       {
-        "type": "NON_EMPTY"
+        "type": "NON_EMPTY",
+        "errorMessage": "You must provide a Pixel ID"
       },
       {
         "type": "REGEX",
         "args": [
-          "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
-        ]
+          "^\\s*([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}\\s*,\\s*)*([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12})\\s*$"
+        ],
+        "errorMessage": "Invalid Pixel ID Format"
       }
-    ]
+    ],
+    "alwaysInSummary": true
   },
   {
     "type": "TEXT",
@@ -211,15 +214,19 @@ function bootstrap() {
   var additionalInitData = (data.additional_init_data) ? makeTableMap(data.additional_init_data, 'key', 'value') : {};
   var initData = mergeObjects(data, additionalInitData);
 
-  ndp('init', initData.pixel_id, initData);
-  ndp('track', initData.event_type, data);
+  var multi_pixel_list =  data.pixel_id.split(",").map(pid => pid.trim());
+  multi_pixel_list.forEach(pixelId => {
+      ndp('init', pixelId, initData);
+  });
+  
+  ndp('track', initData.event_type, {pixel_ids: multi_pixel_list});
+
 
   var url = 'https://ads.nextdoor.com/public/pixel/ndp.js';
   injectScript(url, data.gtmOnSuccess, data.gtmOnFailure, url);
 }
 
 bootstrap();
-
 
 ___WEB_PERMISSIONS___
 
@@ -648,7 +655,36 @@ ___WEB_PERMISSIONS___
 
 ___TESTS___
 
-scenarios: []
+scenarios:
+- name: Basic Test
+  code: |-
+    // Call runCode to run the template's code.
+    runCode(mockData);
+
+    // Verify that the tag finished successfully.
+    assertApi('gtmOnSuccess').wasCalled();
+- name: Multi Pixel
+  code: "mock('copyFromWindow', key => {\n  if (key === 'ndp') return function() {\n\
+    \    if (arguments[0] === 'track') {\n      assertThat(arguments[2], 'Pixel ID\
+    \ list is correct').isEqualTo({pixel_ids: ['550e8400-e29b-41d4-a716-446655440000',\
+    \ '87429417-4f47-4a99-8d32-2080ae007119']});\n    }\n  };\n});\n     \n// Call\
+    \ runCode to run the template's code.\nrunCode(mockData);\n\n// Verify that the\
+    \ tag finished successfully.\nassertApi('gtmOnSuccess').wasCalled();"
+setup: |-
+  const mockData = {
+    pixel_id: '550e8400-e29b-41d4-a716-446655440000, 87429417-4f47-4a99-8d32-2080ae007119',
+    event_type: 'Page View',
+  };
+
+  const scriptUrl = 'https://ads.nextdoor.com/public/pixel/ndp.js';
+
+  // Create injectScript mock
+  let success, failure;
+  mock('injectScript', (url, onsuccess, onfailure) => {
+    success = onsuccess;
+    failure = onfailure;
+    onsuccess();
+  });
 
 
 ___NOTES___
