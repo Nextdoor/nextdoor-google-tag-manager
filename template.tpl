@@ -142,7 +142,7 @@ ___TEMPLATE_PARAMETERS___
       {
         "value": "CUSTOM_CONVERSION_10",
         "displayValue": "Custom Conversion 10"
-      }        
+      }
     ],
     "simpleValueType": true
   },
@@ -157,6 +157,13 @@ ___TEMPLATE_PARAMETERS___
     "name": "user_email_hash",
     "displayName": "User Hashed Email (SHA-256)",
     "simpleValueType": true
+  },
+  {
+    "type": "TEXT",
+    "name": "event_id",
+    "displayName": "Event ID",
+    "simpleValueType": true,
+    "help": "Set the Event ID parameter when you plan to use the same event in the Conversion API. This field helps deduplicate events coming from multiple sources."
   }
 ]
 
@@ -214,12 +221,16 @@ function bootstrap() {
   var additionalInitData = (data.additional_init_data) ? makeTableMap(data.additional_init_data, 'key', 'value') : {};
   var initData = mergeObjects(data, additionalInitData);
 
-  var multi_pixel_list =  data.pixel_id.split(",").map(pid => pid.trim());
+  var multi_pixel_list = data.pixel_id.split(",").map(pid => pid.trim());
   multi_pixel_list.forEach(pixelId => {
       ndp('init', pixelId, initData);
   });
   
-  ndp('track', initData.event_type, {pixel_ids: multi_pixel_list});
+  let event_params = {pixel_ids: multi_pixel_list};
+  if (data.event_id) {
+    event_params.event_id = data.event_id;
+  }
+  ndp('track', initData.event_type, event_params);
 
 
   var url = 'https://ads.nextdoor.com/public/pixel/ndp.js';
@@ -227,6 +238,7 @@ function bootstrap() {
 }
 
 bootstrap();
+
 
 ___WEB_PERMISSIONS___
 
@@ -670,8 +682,27 @@ scenarios:
     \ '87429417-4f47-4a99-8d32-2080ae007119']});\n    }\n  };\n});\n     \n// Call\
     \ runCode to run the template's code.\nrunCode(mockData);\n\n// Verify that the\
     \ tag finished successfully.\nassertApi('gtmOnSuccess').wasCalled();"
+- name: Event ID
+  code: |-
+    mockData = {pixel_id: '550e8400-e29b-41d4-a716-446655440000', event_id: 'eventId'};
+
+    mock('copyFromWindow', function(key) {
+      if (key === 'ndp') {
+        return function() {
+          if (arguments[0] === 'track') {
+            assertThat(arguments[2].event_id, 'eventID included in tracking call').isEqualTo(mockData.event_id);
+          }
+        };
+      }
+    });
+
+    // Call runCode to run the template's code.
+    runCode(mockData);
+
+    // Verify that the tag finished successfully.
+    assertApi('gtmOnSuccess').wasCalled();
 setup: |-
-  const mockData = {
+  let mockData = {
     pixel_id: '550e8400-e29b-41d4-a716-446655440000, 87429417-4f47-4a99-8d32-2080ae007119',
     event_type: 'Page View',
   };
