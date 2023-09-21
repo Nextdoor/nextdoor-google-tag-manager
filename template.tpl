@@ -164,6 +164,72 @@ ___TEMPLATE_PARAMETERS___
     "displayName": "Event ID",
     "simpleValueType": true,
     "help": "Set the Event ID parameter when you plan to use the same event in the Conversion API. This field helps deduplicate events coming from multiple sources."
+  },  
+  {
+    "type": "GROUP",
+    "name": "custom_data",
+    "displayName": "Custom Data",
+    "groupStyle": "ZIPPY_CLOSED",
+    "subParams": [
+      {
+        "type": "TEXT",
+        "name": "order_value",
+        "displayName": "Order Value",
+        "simpleValueType": true,
+        "help": "ISO 4217 currency followed by the total numeric value (up to two decimal places) associated with the event."
+      },
+      {
+        "type": "TEXT",
+        "name": "order_id",
+        "displayName": "Order ID",
+        "simpleValueType": true,
+        "help": "The order ID for this transaction."
+      },
+      {
+        "type": "PARAM_TABLE",
+        "name": "product_context",
+        "displayName": "Product Context",
+        "paramTableColumns": [
+          {
+            "param": {
+              "type": "TEXT",
+              "name": "id",
+              "displayName": "ID",
+              "simpleValueType": true
+            },
+            "isUnique": true
+          },
+          {
+            "param": {
+              "type": "TEXT",
+              "name": "content_name",
+              "displayName": "Content Name",
+              "simpleValueType": true
+            },
+            "isUnique": false
+          },
+          {
+            "param": {
+              "type": "TEXT",
+              "name": "quantity",
+              "displayName": "Quantity",
+              "simpleValueType": true
+            },
+            "isUnique": false
+          },
+          {
+            "param": {
+              "type": "TEXT",
+              "name": "item_price",
+              "displayName": "Item Price",
+              "simpleValueType": true
+            },
+            "isUnique": false
+          }
+        ],
+        "help": "A list of objects that contain the product IDs associated with the event plus information about the products."
+      }
+    ]
   }
 ]
 
@@ -230,7 +296,9 @@ function bootstrap() {
   if (data.event_id) {
     event_params.event_id = data.event_id;
   }
-  ndp('track', initData.event_type, event_params);
+
+  let custom_data = {order_value: data.order_value, order_id: data.order_id, product_context: data.product_context};
+  ndp('track', initData.event_type, event_params, custom_data);
 
 
   var url = 'https://ads.nextdoor.com/public/pixel/ndp.js';
@@ -701,6 +769,23 @@ scenarios:
 
     // Verify that the tag finished successfully.
     assertApi('gtmOnSuccess').wasCalled();
+- name: Custom Data
+  code: "// Define your mock data\nmockData = {\n  pixel_id: '550e8400-e29b-41d4-a716-446655440000',\n\
+    \  event_id: 'eventId', \n  order_value: \"USD412.21\",\n  order_id: \"ID-12213\"\
+    ,\n  product_context: [\n    {\n      \"id\": \"F123\",\n      \"content_name\"\
+    : \"Food\",\n      \"quantity\": \"2\",\n      \"item_price\": \"8.49\"\n    },\n\
+    \    {\n      \"id\": \"D124\",\n      \"content_name\": \"Drink\",\n      \"\
+    quantity\": \"1\",\n      \"item_price\": \"3.99\"\n    }\n  ]\n};\n\n// Define\
+    \ expected result from mock data\nconst expected_data = {\n  order_value: mockData.order_value,\n\
+    \  order_id: mockData.order_id,\n  product_context: mockData.product_context\n\
+    };\n\n// Mock copyFromWindow function\nmock('copyFromWindow', (key) => {\n  if(key\
+    \ === 'ndp') {\n    return function() {\n      if(arguments[0] === 'track') {\n\
+    \        const custom_data = {\n          order_value: arguments[3].order_value,\n\
+    \          order_id: arguments[3].order_id,\n          product_context: arguments[3].product_context\n\
+    \        };\n        assertThat(custom_data, 'custom data is correctly included\
+    \ in tracking call').isEqualTo(expected_data);\n      }\n    };\n  }\n});\n\n\
+    // Run your code (assuming your code is under runCode function)\nrunCode(mockData);\n\
+    \n// Verify that the success callback was called\nassertApi('gtmOnSuccess').wasCalled();"
 setup: |-
   let mockData = {
     pixel_id: '550e8400-e29b-41d4-a716-446655440000, 87429417-4f47-4a99-8d32-2080ae007119',
@@ -721,5 +806,4 @@ setup: |-
 ___NOTES___
 
 Created on 2/17/2021, 10:38:51 AM
-
 
