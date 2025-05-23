@@ -16,9 +16,11 @@ homepage: "https://business.nextdoor.com/enterprise"
 documentation: "https://help.nextdoor.com/s/article/About-Neighborhood-Ad-Center-NAC-Conversion-Pixel"
 versions:
   # Latest version
+  - sha: 7681f9a1f3f86a21c33fdc476758c32f41855fe6
+    changeNotes: Update the template to Nextdoor Universal Pixel template
+  # Older versions
   - sha: f5955dc5f87c160a2f9668ea60a1eaa7561f7bbb
     changeNotes: Add optional Custom Data field.
-  # Older versions
   - sha: 306a417502ca873a6320a1f5ce36b2da41eb704e
     changeNotes: Add optional Event ID field.
   - sha: 5d7822d4f1f3908c45759fdef58a2e7b4947b2a1
