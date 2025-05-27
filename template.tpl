@@ -383,7 +383,7 @@ ___TEMPLATE_PARAMETERS___
         "name": "restricted_data_usage_state",
         "displayName": "State",
         "simpleValueType": true,
-        "help": "A state that you want to associate to this data processing option. Current accepted values are.\n- 1000 for California\n- 1001 for Colorado\n- 1002 for Connecticut\n- 1003 for Florida\n- 1004 for Oregon\n- 1005 for Texas\n- 1006 for Montana\n- 1007 for Delaware\n- 1008 for Nebraska\n- 1009 for New Hampshire\n- 1010 for New Jersey",
+        "help": "A state that you want to associate to this data processing option. Current accepted values are.\n- 1000 for California\n- 1001 for Colorado\n- 1002 for Connecticut\n- 1003 for Florida\n- 1004 for Oregon\n- 1005 for Texas\n- 1006 for Montana\n- 1007 for Delaware\n- 1008 for Nebraska\n- 1009 for New Hampshire\n- 1010 for New Jersey\n- 1011 for Utah\n- 1012 for Virginia\n- 1013 for Minnesota\n- 1014 for Tennessee\n- 1015 for Maryland\n- 1016 for Indiana\n- 1017 for Kentucky\n- 1018 for Rhode Island",
         "enablingConditions": [
           {
             "paramName": "restricted_data_usage",
