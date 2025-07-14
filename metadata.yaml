@@ -17,9 +17,11 @@ documentation: "https://help.nextdoor.com/s/article/About-Neighborhood-Ad-Center
 versions:
 
   # Latest version
+  - sha: 913104ed95bb881a197f84dc7c6244117babc2a5
+    changeNotes: Update RDU help text
+  # Older versions
   - sha: 66fffe8e39a62a58642fcf2bb144f13f9ed81e30
     changeNotes: Update restricted_data_usage_state to add more states
-  # Older versions
   - sha: 7681f9a1f3f86a21c33fdc476758c32f41855fe6
     changeNotes: Update the template to Nextdoor Universal Pixel template
   - sha: f5955dc5f87c160a2f9668ea60a1eaa7561f7bbb
