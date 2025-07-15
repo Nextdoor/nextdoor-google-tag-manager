@@ -17,9 +17,11 @@ documentation: "https://help.nextdoor.com/s/article/About-Neighborhood-Ad-Center
 versions:
 
   # Latest version
+  - sha: 1abd58009687c449d579d55601740c07f1d5dc8d
+    changeNotes: Update Logo. Display event name in summary.
+  # Older versions
   - sha: 913104ed95bb881a197f84dc7c6244117babc2a5
     changeNotes: Update RDU help text
-  # Older versions
   - sha: 66fffe8e39a62a58642fcf2bb144f13f9ed81e30
     changeNotes: Update restricted_data_usage_state to add more states
   - sha: 7681f9a1f3f86a21c33fdc476758c32f41855fe6
