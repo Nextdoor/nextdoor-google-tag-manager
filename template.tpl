@@ -206,7 +206,8 @@ ___TEMPLATE_PARAMETERS___
         ]
       }
     ],
-    "simpleValueType": true
+    "simpleValueType": true,
+    "defaultValue": "standard"
   },
   {
     "type": "GROUP",
@@ -532,16 +533,16 @@ function bootstrap() {
     });
   }
 
-  var event_name_final = null;
-  if (initData.event_name == 'standard') {
-    event_name_final = initData.standard_event_name;
+  var event_name_final = 'PAGE_VIEW';
+  if (initData.event_name == 'variable') {
+    event_name_final = initData.variable_event_name;
   } else if (initData.event_name == 'custom') {
     event_name_final = initData.custom_event_name;
     if (data.custom_event_nickname) {
       event_params.nickname = data.custom_event_nickname;
     }
   } else {
-    event_name_final = initData.variable_event_name;
+    event_name_final = initData.standard_event_name;
   }
 
   ndp('track', event_name_final, event_params, custom_data);
