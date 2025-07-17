@@ -533,7 +533,7 @@ function bootstrap() {
     });
   }
 
-  var event_name_final = 'PAGE_VIEW';
+  var event_name_final = null;
   if (initData.event_name == 'variable') {
     event_name_final = initData.variable_event_name;
   } else if (initData.event_name == 'custom') {
@@ -545,6 +545,11 @@ function bootstrap() {
     event_name_final = initData.standard_event_name;
   }
 
+  event_name_final = event_name_final || 'PAGE_VIEW';
+
+  log('[ND] event_name_final = ', event_name_final);
+  log('[ND] event_params = ', event_params);
+  log('[ND] custom_data = ', custom_data);
   ndp('track', event_name_final, event_params, custom_data);
 
   var url = 'https://ads.nextdoor.com/public/pixel/ndp.js?id=' + multi_pixel_list[0];
