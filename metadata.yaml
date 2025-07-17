@@ -17,9 +17,11 @@ documentation: "https://help.nextdoor.com/s/article/About-Neighborhood-Ad-Center
 versions:
 
   # Latest version
+  - sha: c9653cca9720f19aa887eb6bf71d7f33fbfad508
+    changeNotes: Second attempt of addressing empty event name issue.
+  # Older versions
   - sha: a2a2ea8266a3fc5a3af1ff73c9b28ca11bc1c702
     changeNotes: Addressing empty event name issue.
-  # Older versions
   - sha: 1abd58009687c449d579d55601740c07f1d5dc8d
     changeNotes: Update Logo. Display event name in summary.
   - sha: 913104ed95bb881a197f84dc7c6244117babc2a5
