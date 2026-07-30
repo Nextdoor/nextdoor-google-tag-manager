@@ -458,6 +458,7 @@ function bootstrapFn() {
 
 // Checks whether a given string is likely to be a cryptographic hash
 const isHash = (str) => {
+  if (!str) return false;
   const hexRegex = '/^[a-fA-F0-9]+$/';
   const length = str.length;
 
