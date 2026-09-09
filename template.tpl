@@ -426,7 +426,6 @@ var makeTableMap = require('makeTableMap');
 var sendPixel = require('sendPixel');
 var setInWindow = require('setInWindow');
 var setCookie = require('setCookie');
-var sha256 = require('sha256');
 var getCookieValues = require('getCookieValues');
 
 function mergeObjects() {
@@ -459,7 +458,7 @@ function bootstrapFn() {
 // Checks whether a given string is likely to be a cryptographic hash
 const isHash = (str) => {
   if (!str) return false;
-  const hexRegex = '/^[a-fA-F0-9]+$/';
+  const hexRegex = /^[a-fA-F0-9]+$/;
   const length = str.length;
 
   const knownHexHashes = {
