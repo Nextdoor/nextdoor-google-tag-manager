@@ -467,7 +467,7 @@ const isHexChar = (c) => {
 const isHexString = (str) => {
   if (typeof str !== 'string') return false;
   for (let i = 0; i < str.length; i++) {
-    if (!isHexChar(str[i])) return false;
+    if (!isHexChar(str.charAt(i))) return false;
   }
   return true;
 };
