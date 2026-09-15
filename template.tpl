@@ -455,10 +455,23 @@ function bootstrapFn() {
   return copyFromWindow('ndp');
 }
 
+// Sandboxed JS has no regex literals and no createRegex/testRegex on web
+// templates, so the hex check is done character by character.
+var HEX_CHARS = '0123456789abcdef';
+
+const isHexString = (str) => {
+  const chars = str.toLowerCase().split('');
+  for (let i = 0; i < chars.length; i++) {
+    if (HEX_CHARS.indexOf(chars[i]) === -1) {
+      return false;
+    }
+  }
+  return true;
+};
+
 // Checks whether a given string is likely to be a cryptographic hash
 const isHash = (str) => {
   if (!str) return false;
-  const hexRegex = /^[a-fA-F0-9]+$/;
   const length = str.length;
 
   const knownHexHashes = {
@@ -467,8 +480,8 @@ const isHash = (str) => {
     64: 'SHA-256',
     128: 'SHA-512',
   };
-  // Check hex-based hashes
-  if (knownHexHashes[length] && hexRegex.test(str)) {
+  // Length must match a known hex digest, and every char must be hex
+  if (knownHexHashes[length] && isHexString(str)) {
     return true;
   }
 
@@ -1102,6 +1115,99 @@ scenarios:
     \ in tracking call').isEqualTo(expected_data);\n      }\n    };\n  }\n});\n\n\
     // Run your code (assuming your code is under runCode function)\nrunCode(mockData);\n\
     \n// Verify that the success callback was called\nassertApi('gtmOnSuccess').wasCalled();"
+- name: Pre-hashed Email (SHA-256) Routed To user_email_hash
+  code: |-
+    const SHA256 = '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8';
+    mockData = {
+      pixel_id: '550e8400-e29b-41d4-a716-446655440000',
+      user_attributes: [{type: 'email', value: SHA256}]
+    };
+
+    mock('copyFromWindow', key => {
+      if (key === 'ndp') return function() {
+        if (arguments[0] === 'init') {
+          assertThat(arguments[2].user_email_hash, 'pre-hashed email uses user_email_hash').isEqualTo(SHA256);
+          assertThat(arguments[2].user_email, 'plaintext email field is not set').isUndefined();
+        }
+      };
+    });
+
+    runCode(mockData);
+
+    assertApi('gtmOnSuccess').wasCalled();
+- name: Pre-hashed Email Is Case Insensitive
+  code: |-
+    const SHA256_UPPER = '5E884898DA28047151D0E56F8DC6292773603D0D6AABBDD62A11EF721D1542D8';
+    mockData = {
+      pixel_id: '550e8400-e29b-41d4-a716-446655440000',
+      user_attributes: [{type: 'email', value: SHA256_UPPER}]
+    };
+
+    mock('copyFromWindow', key => {
+      if (key === 'ndp') return function() {
+        if (arguments[0] === 'init') {
+          assertThat(arguments[2].user_email_hash, 'uppercase hex is still detected as a hash').isEqualTo(SHA256_UPPER);
+        }
+      };
+    });
+
+    runCode(mockData);
+
+    assertApi('gtmOnSuccess').wasCalled();
+- name: Hash-Length Non-Hex String Is Not Treated As A Hash
+  code: |-
+    // 64 characters, but the final character is not hex. Guards the character
+    // check itself: a length-only test would misclassify this as a SHA-256.
+    const NOT_HEX = '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542dz';
+    mockData = {
+      pixel_id: '550e8400-e29b-41d4-a716-446655440000',
+      user_attributes: [{type: 'email', value: NOT_HEX}]
+    };
+
+    mock('copyFromWindow', key => {
+      if (key === 'ndp') return function() {
+        if (arguments[0] === 'init') {
+          assertThat(arguments[2].user_email, 'non-hex value falls back to user_email').isEqualTo(NOT_HEX);
+          assertThat(arguments[2].user_email_hash, 'hash field is not set').isUndefined();
+        }
+      };
+    });
+
+    runCode(mockData);
+
+    assertApi('gtmOnSuccess').wasCalled();
+- name: Plaintext Email Routed To user_email
+  code: |-
+    const EMAIL = 'neighbor@example.com';
+    mockData = {
+      pixel_id: '550e8400-e29b-41d4-a716-446655440000',
+      user_attributes: [{type: 'email', value: EMAIL}]
+    };
+
+    mock('copyFromWindow', key => {
+      if (key === 'ndp') return function() {
+        if (arguments[0] === 'init') {
+          assertThat(arguments[2].user_email, 'plaintext email uses user_email').isEqualTo(EMAIL);
+          assertThat(arguments[2].user_email_hash, 'hash field is not set').isUndefined();
+        }
+      };
+    });
+
+    runCode(mockData);
+
+    assertApi('gtmOnSuccess').wasCalled();
+- name: Empty Email Value Does Not Throw
+  code: |-
+    mockData = {
+      pixel_id: '550e8400-e29b-41d4-a716-446655440000',
+      user_attributes: [{type: 'email', value: ''}]
+    };
+
+    runCode(mockData);
+
+    // bootstrap() must reach injectScript; a throw in isHash would skip it.
+    assertApi('gtmOnSuccess').wasCalled();
+
 setup: |-
   let mockData = {
     pixel_id: '550e8400-e29b-41d4-a716-446655440000, 87429417-4f47-4a99-8d32-2080ae007119',
