@@ -455,19 +455,15 @@ function bootstrapFn() {
   return copyFromWindow('ndp');
 }
 
-// Sandboxed JS has no regex literals and no createRegex/testRegex on web
-// templates, and charCodeAt is unavailable, so hex validation uses an
-// object lookup.
-var HEX_SET = {
-  '0':1,'1':1,'2':1,'3':1,'4':1,'5':1,'6':1,'7':1,
-  '8':1,'9':1,'a':1,'b':1,'c':1,'d':1,'e':1,'f':1
-};
+// Sandboxed JS has no regex literals, no createRegex/testRegex, and no
+// charCodeAt on web templates. Use indexOf on a hex string instead.
+var HEX_CHARS = '0123456789abcdef';
 
 const isHexString = (str) => {
   if (typeof str !== 'string') return false;
   var lower = str.toLowerCase();
   for (var i = 0; i < lower.length; i++) {
-    if (!HEX_SET[lower.charAt(i)]) return false;
+    if (HEX_CHARS.indexOf(lower.charAt(i)) === -1) return false;
   }
   return true;
 };
