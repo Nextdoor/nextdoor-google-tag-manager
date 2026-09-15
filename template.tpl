@@ -460,6 +460,7 @@ function bootstrapFn() {
 var HEX_CHARS = '0123456789abcdef';
 
 const isHexString = (str) => {
+  if (typeof str !== 'string') return false;
   const chars = str.toLowerCase().split('');
   for (let i = 0; i < chars.length; i++) {
     if (HEX_CHARS.indexOf(chars[i]) === -1) {
@@ -1206,6 +1207,29 @@ scenarios:
     runCode(mockData);
 
     // bootstrap() must reach injectScript; a throw in isHash would skip it.
+    assertApi('gtmOnSuccess').wasCalled();
+- name: Array-Valued Email Does Not Throw
+  code: |-
+    // An array with exactly 64 elements has .length === 64, which matches the
+    // SHA-256 bucket in knownHexHashes. Without the typeof guard, isHexString
+    // would call .toLowerCase() on the array and throw.
+    const ARRAY_VALUE = [];
+    for (let i = 0; i < 64; i++) { ARRAY_VALUE.push('a'); }
+    mockData = {
+      pixel_id: '550e8400-e29b-41d4-a716-446655440000',
+      user_attributes: [{type: 'email', value: ARRAY_VALUE}]
+    };
+
+    mock('copyFromWindow', key => {
+      if (key === 'ndp') return function() {
+        if (arguments[0] === 'init') {
+          assertThat(arguments[2].user_email_hash, 'array value must not be treated as a hash').isUndefined();
+        }
+      };
+    });
+
+    runCode(mockData);
+
     assertApi('gtmOnSuccess').wasCalled();
 
 setup: |-
