@@ -456,18 +456,18 @@ function bootstrapFn() {
 }
 
 // Sandboxed JS has no regex literals and no createRegex/testRegex on web
-// templates, so the hex check is done via charCodeAt range checks.
-const isHexChar = (c) => {
-  const code = c.charCodeAt(0);
-  return (code >= 48 && code <= 57)  ||  // 0-9
-         (code >= 65 && code <= 70)  ||  // A-F
-         (code >= 97 && code <= 102);    // a-f
+// templates, and charCodeAt is unavailable, so hex validation uses an
+// object lookup.
+var HEX_SET = {
+  '0':1,'1':1,'2':1,'3':1,'4':1,'5':1,'6':1,'7':1,
+  '8':1,'9':1,'a':1,'b':1,'c':1,'d':1,'e':1,'f':1
 };
 
 const isHexString = (str) => {
   if (typeof str !== 'string') return false;
-  for (let i = 0; i < str.length; i++) {
-    if (!isHexChar(str.charAt(i))) return false;
+  var lower = str.toLowerCase();
+  for (var i = 0; i < lower.length; i++) {
+    if (!HEX_SET[lower.charAt(i)]) return false;
   }
   return true;
 };
