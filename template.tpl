@@ -455,19 +455,15 @@ function bootstrapFn() {
   return copyFromWindow('ndp');
 }
 
-// Sandboxed JS has no regex literals and no createRegex/testRegex on web
-// templates, so the hex check is done via charCodeAt range checks.
-const isHexChar = (c) => {
-  const code = c.charCodeAt(0);
-  return (code >= 48 && code <= 57)  ||  // 0-9
-         (code >= 65 && code <= 70)  ||  // A-F
-         (code >= 97 && code <= 102);    // a-f
-};
+// Sandboxed JS has no regex literals, no createRegex/testRegex, and no
+// charCodeAt on web templates. Use indexOf on a hex string instead.
+var HEX_CHARS = '0123456789abcdef';
 
 const isHexString = (str) => {
   if (typeof str !== 'string') return false;
-  for (let i = 0; i < str.length; i++) {
-    if (!isHexChar(str[i])) return false;
+  var lower = str.toLowerCase();
+  for (var i = 0; i < lower.length; i++) {
+    if (HEX_CHARS.indexOf(lower.charAt(i)) === -1) return false;
   }
   return true;
 };
