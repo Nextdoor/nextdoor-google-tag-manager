@@ -17,6 +17,9 @@ documentation: "https://help.nextdoor.com/s/article/About-Neighborhood-Ad-Center
 versions:
 
   # Latest version
+  - sha: 5add0d4b2c2cf068c86b1156d0148a9d279c48ac
+    changeNotes: Fix hash detection in sandboxed JS (replace regex with charCodeAt checks, add non-string type guard).
+  # Older versions
   - sha: f58087924cd6fcac2a3bc628f03be714215a9359
     changeNotes: Fix issue with pre-hashed emails.
   # Older versions
