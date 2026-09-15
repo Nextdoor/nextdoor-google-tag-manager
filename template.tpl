@@ -456,16 +456,18 @@ function bootstrapFn() {
 }
 
 // Sandboxed JS has no regex literals and no createRegex/testRegex on web
-// templates, so the hex check is done character by character.
-var HEX_CHARS = '0123456789abcdef';
+// templates, so the hex check is done via charCodeAt range checks.
+const isHexChar = (c) => {
+  const code = c.charCodeAt(0);
+  return (code >= 48 && code <= 57)  ||  // 0-9
+         (code >= 65 && code <= 70)  ||  // A-F
+         (code >= 97 && code <= 102);    // a-f
+};
 
 const isHexString = (str) => {
   if (typeof str !== 'string') return false;
-  const chars = str.toLowerCase().split('');
-  for (let i = 0; i < chars.length; i++) {
-    if (HEX_CHARS.indexOf(chars[i]) === -1) {
-      return false;
-    }
+  for (let i = 0; i < str.length; i++) {
+    if (!isHexChar(str[i])) return false;
   }
   return true;
 };
